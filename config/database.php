@@ -1,10 +1,10 @@
 <?php
 
     class Database {
-        private $host = $_ENV['DB_HOST'];
-        private $db_name = $_ENV['DB_DATABASE'];
-        private $username = $_ENV['DB_USERNAME'];
-        private $password = $_ENV['DB_PASSWORD'];
+        private $host = 'localhost';
+        private $db_name = 'erost';
+        private $username = 'root';
+        private $password = '';
         public $conn;
 
 

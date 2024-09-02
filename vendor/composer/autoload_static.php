@@ -23,9 +23,17 @@ class ComposerStaticInit90f733d3dfd8e542ee5c4e4fe2615dbb
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
         ),
+        'R' => 
+        array (
+            'Router\\' => 7,
+        ),
         'P' => 
         array (
             'PhpOption\\' => 10,
+        ),
+        'H' => 
+        array (
+            'Helpers\\' => 8,
         ),
         'G' => 
         array (
@@ -34,6 +42,11 @@ class ComposerStaticInit90f733d3dfd8e542ee5c4e4fe2615dbb
         'D' => 
         array (
             'Dotenv\\' => 7,
+        ),
+        'C' => 
+        array (
+            'Core\\' => 5,
+            'Config\\' => 7,
         ),
     );
 
@@ -54,9 +67,17 @@ class ComposerStaticInit90f733d3dfd8e542ee5c4e4fe2615dbb
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
+        'Router\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/routers',
+        ),
         'PhpOption\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
+        ),
+        'Helpers\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/helpers',
         ),
         'GrahamCampbell\\ResultType\\' => 
         array (
@@ -65,6 +86,14 @@ class ComposerStaticInit90f733d3dfd8e542ee5c4e4fe2615dbb
         'Dotenv\\' => 
         array (
             0 => __DIR__ . '/..' . '/vlucas/phpdotenv/src',
+        ),
+        'Core\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/core',
+        ),
+        'Config\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/config',
         ),
     );
 
