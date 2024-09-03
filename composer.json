@@ -10,9 +10,12 @@
         "psr-4": {
             "Core\\": "core/",
             "Vendor\\Erost\\": "src/",
-            "Config\\" : "config/",
-            "Router\\" : "src/routers/",
-            "Helpers\\" : "helpers/"
+            "Config\\": "config/",
+            "Helpers\\": "helpers/",
+            "Src\\Routers\\": "src/routers/",
+            "Src\\routers\\enrutador\\": "src/routers/",
+            "Src\\utils\\response\\": "src/utils/"
+         
         }
     },
     "authors": [

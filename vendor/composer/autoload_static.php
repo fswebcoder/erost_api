@@ -22,10 +22,9 @@ class ComposerStaticInit90f733d3dfd8e542ee5c4e4fe2615dbb
             'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
-        ),
-        'R' => 
-        array (
-            'Router\\' => 7,
+            'Src\\utils\\response\\' => 19,
+            'Src\\routers\\enrutador\\' => 22,
+            'Src\\Routers\\' => 12,
         ),
         'P' => 
         array (
@@ -67,7 +66,15 @@ class ComposerStaticInit90f733d3dfd8e542ee5c4e4fe2615dbb
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
-        'Router\\' => 
+        'Src\\utils\\response\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/utils',
+        ),
+        'Src\\routers\\enrutador\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/routers',
+        ),
+        'Src\\Routers\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src/routers',
         ),

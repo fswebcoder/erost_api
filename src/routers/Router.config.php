@@ -1,9 +1,9 @@
 <?php 
-    namespace RouterConfig;
+
     class RutasPermitidas {
 
         public function __construct(){
-            
+            $this->rutasPermitidas();
         }
 
         public static function rutasPermitidas(){
