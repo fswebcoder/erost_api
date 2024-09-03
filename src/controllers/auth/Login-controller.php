@@ -3,7 +3,7 @@
         private $userModel;
 
         public function login($parametros) {
-            echo "ejecutando el puto login ";
+            echo "ejecutando el  login ";
         }
 
     }
