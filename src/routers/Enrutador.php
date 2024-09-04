@@ -60,9 +60,6 @@ class Enrutador
 
 
                     break;
-                case 'register':
-                    $metodo = 'register';
-                    break;
                 case 'error':
                     $metodo = 'error';
                     break;
