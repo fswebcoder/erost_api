@@ -15,7 +15,7 @@
                     ResponseApi::enviarRespuesta(200, 'Login correcto', $user);
                     
                 } else {
-                    ResponseApi::enviarRespuesta(400, 'Datos de conexiónm incorrectos');
+                    ResponseApi::enviarRespuesta(401, 'Datos de conexiónm incorrectos');
                 }
             } else {
                 ResponseApi::enviarRespuesta(400, 'Usuario no encontrado');

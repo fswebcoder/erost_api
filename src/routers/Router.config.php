@@ -10,7 +10,7 @@
             return array(
                 'home' ,
                 'login' ,
-                'register' ,
+                'registro' ,
                 'error'
             );
         }
