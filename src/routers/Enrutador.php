@@ -1,11 +1,7 @@
 <?php 
 
-    namespace Src\routers\enrutador;
-
-use ResponseApi;
-use RutasPermitidas;
+    require_once './src/utils/Response-api.php';
     include 'Router.config.php';
-    include './src/utils/Response-api.php';
 
     class Enrutador {
 
@@ -18,7 +14,7 @@ use RutasPermitidas;
         protected static function ValidarRuta(array $url){
             $metodo = '';
             if(count($url) <= 1){
-                echo "mostrar la documentación";
+                return Enrutador::UrlInvalida();
             }
             if(in_array($url[4], RutasPermitidas::rutasPermitidas())){
                 $methodHttp = $_SERVER['REQUEST_METHOD'];  
@@ -26,7 +22,16 @@ use RutasPermitidas;
                     case 'login':
                         if($methodHttp == 'POST'){
                             $metodo = 'Login';
-                            Enrutador::EnrutarControlador($url[4], $metodo , ["email" =>"FABIO", "password"=> "123"]);
+                            $json = file_get_contents('php://input');
+                            $data = json_decode($json, true);
+                            if (isset($data['email']) && isset($data['contrasena'])) {
+                                $email = $data['email'];
+                                $contrasena = $data['contrasena'];
+                                $metodo = 'Login';
+                                Enrutador::EnrutarControlador($url[4], $metodo, ["email" => $email, "contrasena" => $contrasena]);
+                            } else {
+                                ResponseApi::enviarRespuesta(400, 'Bad Request, faltan datos');
+                            }
                         }else{
                             ResponseApi::enviarRespuesta(405, 'Method Not Allowed');
                         }
@@ -47,17 +52,16 @@ use RutasPermitidas;
 
                
             }else{
-                // return Enrutador::UrlInvalida();
+                return Enrutador::UrlInvalida();
             }
         }
 
         protected static function enrutarControlador(string $controlador, string $metodo, array $parametros){
             $controlador = ucwords(str_replace('-', '', $controlador));
             $controladorPath = "./src/controllers/auth/" . $controlador . "-controller.php";
-            echo file_exists($controladorPath);
             if (file_exists($controladorPath)) {
                 require_once $controladorPath;
-    
+     
                 if (class_exists($controlador)) {
                     $controller = new $controlador;
                     if (method_exists($controller, $metodo)) {
@@ -69,7 +73,7 @@ use RutasPermitidas;
                     return Enrutador::UrlInvalida();
                 }
             } else {
-                echo "Controlador no encontrado";
+                ResponseApi::enviarRespuesta(404, 'Controlador no encontrado');
             }
             
         }

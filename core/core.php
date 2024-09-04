@@ -1,7 +1,6 @@
 <?php 
-    namespace Core;
-    use Src\routers\enrutador\Enrutador;
-
+    require_once './src/routers/Enrutador.php';
+    
     class Core {
         public function __construct(){
             $this->obtenerUrl($_SERVER["REQUEST_URI"]);
