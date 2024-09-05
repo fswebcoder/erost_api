@@ -24,14 +24,13 @@ class Enrutador
             switch ($url[4]) {
                 case 'login':
                     if ($methodHttp == 'POST') {
-                        $metodo = 'Login';
                         $json = file_get_contents('php://input');
                         $data = json_decode($json, true);
                         if (isset($data['email']) && isset($data['contrasena'])) {
                             $email = $data['email'];
                             $contrasena = $data['contrasena'];
-                            $metodo = 'Login';
-                            Enrutador::EnrutarControlador($url[4], "auth", $metodo, ["email" => $email, "contrasena" => $contrasena]);
+                            $clase = 'Login';
+                            Enrutador::EnrutarControlador($url[4], $clase, ["email" => $email, "contrasena" => $contrasena]);
                         } else {
                             ResponseApi::enviarRespuesta(400, 'Bad Request, faltan datos');
                         }
@@ -41,7 +40,7 @@ class Enrutador
                     break;
                 case 'registro':
                     if ($methodHttp == 'POST') {
-                        $metodo = 'RegistroUsuarios';
+                       
                         $json = file_get_contents('php://input');
                         $data = json_decode($json, true);
 
@@ -50,9 +49,9 @@ class Enrutador
                             $cargo = $data['cargo'];
                             $foto = $data['foto'];
                             $edad = $data['edad'];
+                            $clase = 'registro';
                             $arrayInfo = array("nombre" => $nombre, "cargo" => $cargo, "foto" => $foto, "edad" => $edad);
-                            ResponseApi::enviarRespuesta(200, 'OK', $arrayInfo);
-                            Enrutador::EnrutarControlador($url[4], "usuarios", $metodo, $arrayInfo);
+                            Enrutador::EnrutarControlador($url[4], $clase, $arrayInfo);
                         } else {
                             ResponseApi::enviarRespuesta(400, 'Bad Request, faltan datos');
                         }
@@ -71,10 +70,10 @@ class Enrutador
         }
     }
 
-    protected static function enrutarControlador(string $controlador, string $folder, string $metodo, array $parametros)
+    protected static function enrutarControlador(string $controlador, string $metodo, array $parametros)
     {
         $controlador = ucwords(str_replace('-', '', $controlador));
-        $controladorPath = "./src/controllers/" . $folder . "/" . $controlador . "-controller.php";
+        $controladorPath = "./src/controllers/". $controlador . "-controller.php";
         if (file_exists($controladorPath)) {
             require_once $controladorPath;
             if (class_exists($controlador)) {
