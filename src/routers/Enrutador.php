@@ -51,7 +51,7 @@ class Enrutador {
                             $json = file_get_contents('php://input');
                             $data = json_decode($json, true);
         
-                            if (isset($data['nombre']) && isset($data['cargo']) && isset($data['foto']) && isset($data['edad']) && isset($data['email']) && isset($data['contrasena'])) {
+                            if (isset($data['nombre']) && isset($data['cargo']) && isset($data['foto']) && isset($data['edad']) && isset($data['email']) && isset($data['contrasena']) && isset($data['rol'])) {
                                 $nombre = $data['nombre'];
                                 $cargo = $data['cargo'];
                                 $foto = $data['foto'];
@@ -59,7 +59,7 @@ class Enrutador {
                                 $email = $data['email'];
                                 $contrasena = $data['contrasena'];
                                 $clase = 'registro';
-                                $rol = 3;
+                                $rol = $data['rol'];
                                 $arrayInfo = array("nombre" => $nombre, "cargo" => $cargo, "foto" => $foto, "edad" => $edad, "email" => $email, "contrasena" => $contrasena, "ts_rol_idts_rol" => $rol);
                                 Enrutador::EnrutarControlador($endpoint, $clase, $arrayInfo);
                             } else {

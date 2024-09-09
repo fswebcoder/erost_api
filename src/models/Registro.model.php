@@ -55,7 +55,8 @@ class RegistroModel
 
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':email', $data['email'], PDO::PARAM_STR);
-            $stmt->bindParam(':contrasena', $data['contrasena'], PDO::PARAM_STR);
+            $contrasena = password_hash($data['contrasena'], PASSWORD_DEFAULT);
+            $stmt->bindParam(':contrasena', $contrasena, PDO::PARAM_STR);
             $stmt->bindParam(':ts_rol_idts_rol', $data['ts_rol_idts_rol'], PDO::PARAM_INT);
             $stmt->execute();
 
@@ -117,6 +118,7 @@ class RegistroModel
     }
 
     public function consultarUsuarioPorId($id)
+     
     {
         try{
             $query = "SELECT 
@@ -136,7 +138,7 @@ class RegistroModel
             WHERE e.idts_empleado = :id";
 
             $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':id', $id['id'], PDO::PARAM_INT);
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             return $user ?: false;
