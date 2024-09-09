@@ -1,20 +1,22 @@
 <?php
 
+
+
 require_once './src/utils/Response-api.php';
 include 'Router.config.php';
 
-class Enrutador
-{
+class Enrutador {
 
-    public static function ParseUrl($url)
+    public static function parseUrl($url)
     {
         $url = explode("/", filter_var(rtrim($url, "/"), FILTER_SANITIZE_URL));
+        // http://localhost/http/backend-erost/api/registro
+        
         $url = array_filter($url);
         return self::ValidarRuta($url);
     }
 
-    protected static function ValidarRuta(array $url)
-    {
+    protected static function ValidarRuta(array $url){
         $metodo = '';
         if (count($url) <= 1) {
             return Enrutador::UrlInvalida();
@@ -22,9 +24,10 @@ class Enrutador
         if (in_array($url[4], RutasPermitidas::rutasPermitidas())) {
             $methodHttp = $_SERVER['REQUEST_METHOD'];
             switch ($url[4]) {
+                //POST, PUT, DELETE y GET
                 case 'login':
                     if ($methodHttp == 'POST') {
-                        $json = file_get_contents('php://input');
+                        $json = file_get_contents('php://input'); 
                         $data = json_decode($json, true);
                         if (isset($data['email']) && isset($data['contrasena'])) {
                             $email = $data['email'];
@@ -49,8 +52,11 @@ class Enrutador
                             $cargo = $data['cargo'];
                             $foto = $data['foto'];
                             $edad = $data['edad'];
+                            $email = $data['email'];
+                            $contrasena = $data['contrasena'];
                             $clase = 'registro';
-                            $arrayInfo = array("nombre" => $nombre, "cargo" => $cargo, "foto" => $foto, "edad" => $edad);
+                            $rol = 3;
+                            $arrayInfo = array("nombre" => $nombre, "cargo" => $cargo, "foto" => $foto, "edad" => $edad, "email" => $email, "contrasena" => $contrasena, "ts_rol_idts_rol" => $rol);
                             Enrutador::EnrutarControlador($url[4], $clase, $arrayInfo);
                         } else {
                             ResponseApi::enviarRespuesta(400, 'Bad Request, faltan datos');
@@ -59,8 +65,14 @@ class Enrutador
 
 
                     break;
-                case 'error':
-                    $metodo = 'error';
+                case 'consultar-usuarios':
+                    if ($methodHttp == 'GET') {
+                       
+                        $json = file_get_contents('php://input');
+                        $data = json_decode($json, true);
+                        $clase = 'consultarUsuario';
+                        Enrutador::EnrutarControlador('Registro', $clase, []);
+                    }
                     break;
                 default:
                     return Enrutador::UrlInvalida();

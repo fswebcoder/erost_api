@@ -11,6 +11,7 @@
                 'home' ,
                 'login' ,
                 'registro' ,
+                'consultar-usuarios' ,
                 'error'
             );
         }
