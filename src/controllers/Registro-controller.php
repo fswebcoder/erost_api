@@ -27,5 +27,16 @@ include './src/models/Registro.model.php';
              }
         }
       
+        public function consultarUsuarioPorId($id){
+            $this->registro = new RegistroModel();
+
+            $usuario = $this->registro->consultarUsuarioPorId($id);
+            if($usuario){
+                ResponseApi::enviarRespuesta(200,' Consulta realizada con éxito ', $usuario);    
+             } else {
+                ResponseApi::enviarRespuesta(400,'No fue posible consultar los usuarios');
+             }
+        }
+
 
     }

@@ -17,65 +17,80 @@ class Enrutador {
     }
 
     protected static function ValidarRuta(array $url){
-        $metodo = '';
         if (count($url) <= 1) {
             return Enrutador::UrlInvalida();
         }
-        if (in_array($url[4], RutasPermitidas::rutasPermitidas())) {
-            $methodHttp = $_SERVER['REQUEST_METHOD'];
-            switch ($url[4]) {
-                //POST, PUT, DELETE y GET
-                case 'login':
-                    if ($methodHttp == 'POST') {
-                        $json = file_get_contents('php://input'); 
-                        $data = json_decode($json, true);
-                        if (isset($data['email']) && isset($data['contrasena'])) {
-                            $email = $data['email'];
-                            $contrasena = $data['contrasena'];
-                            $clase = 'Login';
-                            Enrutador::EnrutarControlador($url[4], $clase, ["email" => $email, "contrasena" => $contrasena]);
+        if (isset($url[4])) {
+            // Separar la parte de la URL antes del '?'
+            $endpoint = explode('?', $url[4])[0];
+        
+            // Verificar si el endpoint está en las rutas permitidas
+            if (in_array($endpoint, RutasPermitidas::rutasPermitidas())) {
+                $methodHttp = $_SERVER['REQUEST_METHOD'];
+        
+                switch ($endpoint) {
+                    case 'login':
+                        if ($methodHttp == 'POST') {
+                            $json = file_get_contents('php://input');
+                            $data = json_decode($json, true);
+                            if (isset($data['email']) && isset($data['contrasena'])) {
+                                $email = $data['email'];
+                                $contrasena = $data['contrasena'];
+                                $clase = 'Login';
+                                Enrutador::EnrutarControlador($endpoint, $clase, ["email" => $email, "contrasena" => $contrasena]);
+                            } else {
+                                ResponseApi::enviarRespuesta(400, 'Bad Request, faltan datos');
+                            }
                         } else {
-                            ResponseApi::enviarRespuesta(400, 'Bad Request, faltan datos');
+                            ResponseApi::enviarRespuesta(405, 'Method Not Allowed');
                         }
-                    } else {
-                        ResponseApi::enviarRespuesta(405, 'Method Not Allowed');
-                    }
-                    break;
-                case 'registro':
-                    if ($methodHttp == 'POST') {
-                       
-                        $json = file_get_contents('php://input');
-                        $data = json_decode($json, true);
-
-                        if (isset($data['nombre']) && isset($data['cargo']) && isset($data['foto']) && isset($data['edad'])) {
-                            $nombre = $data['nombre'];
-                            $cargo = $data['cargo'];
-                            $foto = $data['foto'];
-                            $edad = $data['edad'];
-                            $email = $data['email'];
-                            $contrasena = $data['contrasena'];
-                            $clase = 'registro';
-                            $rol = 3;
-                            $arrayInfo = array("nombre" => $nombre, "cargo" => $cargo, "foto" => $foto, "edad" => $edad, "email" => $email, "contrasena" => $contrasena, "ts_rol_idts_rol" => $rol);
-                            Enrutador::EnrutarControlador($url[4], $clase, $arrayInfo);
+                        break;
+        
+                    case 'registro':
+                        if ($methodHttp == 'POST') {
+                            $json = file_get_contents('php://input');
+                            $data = json_decode($json, true);
+        
+                            if (isset($data['nombre']) && isset($data['cargo']) && isset($data['foto']) && isset($data['edad']) && isset($data['email']) && isset($data['contrasena'])) {
+                                $nombre = $data['nombre'];
+                                $cargo = $data['cargo'];
+                                $foto = $data['foto'];
+                                $edad = $data['edad'];
+                                $email = $data['email'];
+                                $contrasena = $data['contrasena'];
+                                $clase = 'registro';
+                                $rol = 3;
+                                $arrayInfo = array("nombre" => $nombre, "cargo" => $cargo, "foto" => $foto, "edad" => $edad, "email" => $email, "contrasena" => $contrasena, "ts_rol_idts_rol" => $rol);
+                                Enrutador::EnrutarControlador($endpoint, $clase, $arrayInfo);
+                            } else {
+                                ResponseApi::enviarRespuesta(400, 'Bad Request, faltan datos');
+                            }
+                        }
+                        break;
+        
+                    case 'consultar-usuarios':
+                        if ($methodHttp == 'GET') {
+                            $clase = 'consultarUsuario';
+                            Enrutador::EnrutarControlador('Registro', $clase, []);
+                        }
+                        break;
+        
+                    case 'consultaid':
+                        if ($methodHttp == 'GET' && isset($_GET['id'])) {
+                            $id = $_GET['id'];
+                            $clase = 'consultarUsuarioPorId';
+                            $arrayParametros = array("id" => $id);
+                            Enrutador::EnrutarControlador('Registro', $clase, $arrayParametros);
                         } else {
-                            ResponseApi::enviarRespuesta(400, 'Bad Request, faltan datos');
+                            ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
                         }
-                    }
-
-
-                    break;
-                case 'consultar-usuarios':
-                    if ($methodHttp == 'GET') {
-                       
-                        $json = file_get_contents('php://input');
-                        $data = json_decode($json, true);
-                        $clase = 'consultarUsuario';
-                        Enrutador::EnrutarControlador('Registro', $clase, []);
-                    }
-                    break;
-                default:
-                    return Enrutador::UrlInvalida();
+                        break;
+        
+                    default:
+                        return Enrutador::UrlInvalida();
+                }
+            } else {
+                return Enrutador::UrlInvalida();
             }
         } else {
             return Enrutador::UrlInvalida();

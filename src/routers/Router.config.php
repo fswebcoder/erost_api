@@ -8,11 +8,10 @@
 
         public static function rutasPermitidas(){
             return array(
-                'home' ,
                 'login' ,
                 'registro' ,
                 'consultar-usuarios' ,
-                'error'
+                "consultaid"
             );
         }
     }
