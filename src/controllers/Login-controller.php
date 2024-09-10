@@ -10,11 +10,16 @@
             $password = $parametros['contrasena'];
             $this->userModel = new LoginModel();
             $user = $this->userModel->obtenerUsuario($email);
+          
+
+
             if ($user) {
                 if (password_verify($password, $user['contrasena'])) {
-                    ResponseApi::enviarRespuesta(200, 'Login correcto', $user);
+                    unset($user['contrasena']);
+                    ResponseApi::enviarRespuesta(200, 'Login correcto',$user);
                     
                 } else {
+                    http_response_code(401);
                     ResponseApi::enviarRespuesta(401, 'Datos de conexiónm incorrectos');
                 }
             } else {

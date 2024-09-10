@@ -9,9 +9,12 @@ class Enrutador {
 
     public static function parseUrl($url)
     {
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization');
+        header('Access-Control-Max-Age: 86400');
+
         $url = explode("/", filter_var(rtrim($url, "/"), FILTER_SANITIZE_URL));
-        // http://localhost/http/backend-erost/api/registro
-        
         $url = array_filter($url);
         return self::ValidarRuta($url);
     }
@@ -21,10 +24,8 @@ class Enrutador {
             return Enrutador::UrlInvalida();
         }
         if (isset($url[4])) {
-            // Separar la parte de la URL antes del '?'
             $endpoint = explode('?', $url[4])[0];
-        
-            // Verificar si el endpoint está en las rutas permitidas
+    
             if (in_array($endpoint, RutasPermitidas::rutasPermitidas())) {
                 $methodHttp = $_SERVER['REQUEST_METHOD'];
         
@@ -74,7 +75,12 @@ class Enrutador {
                             Enrutador::EnrutarControlador('Registro', $clase, []);
                         }
                         break;
-        
+                    case 'consultar-roles':
+                        if ($methodHttp == 'GET') {
+                            $clase = 'consultarRoles';
+                            Enrutador::EnrutarControlador('Rol', $clase, []);
+                        }
+                        break;
                     case 'consultaid':
                         if ($methodHttp == 'GET' && isset($_GET['id'])) {
                             $id = $_GET['id'];

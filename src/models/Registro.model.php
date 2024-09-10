@@ -16,10 +16,8 @@ class RegistroModel
         $fechaRegistro = date('Y-m-d H:i:s');
 
         try {
-            // Iniciar la transacción
             $this->conn->beginTransaction();
 
-            // 1. Insertar en ts_empleado
             $query = "INSERT INTO ts_empleado (nombre, cargo, edad, fecha_registro) 
                           VALUES (:nombre, :cargo, :edad, :fecha_registro)";
 
@@ -81,7 +79,6 @@ class RegistroModel
 
             return $empleado ?: false;
         } catch (PDOException $exception) {
-            // En caso de error, revertir la transacción
             $this->conn->rollBack();
             echo "Error al realizar la consulta: " . $exception->getMessage();
             return false;

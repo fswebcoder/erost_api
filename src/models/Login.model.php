@@ -18,7 +18,7 @@
                 $stmt->execute();
     
                 $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
+                
                 return $user ?: false;
     
             } catch (PDOException $exception) {

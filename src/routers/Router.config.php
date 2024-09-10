@@ -11,7 +11,8 @@
                 'login' ,
                 'registro' ,
                 'consultar-usuarios' ,
-                "consultaid"
+                "consultaid",
+                "consultar-roles"
             );
         }
     }
