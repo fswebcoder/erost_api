@@ -50,7 +50,7 @@ class RegistroModel
 
             $query = "INSERT INTO ts_usuario (email, contrasena, ts_rol_idts_rol) 
                           VALUES (:email, :contrasena, :ts_rol_idts_rol)";
-
+            
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':email', $data['email'], PDO::PARAM_STR);
             $contrasena = password_hash($data['contrasena'], PASSWORD_DEFAULT);
@@ -90,6 +90,7 @@ class RegistroModel
     {
         try {
             $query = "SELECT 
+                e.idts_empleado,
                 e.nombre AS nombre_empleado,
                 e.cargo,
                 e.edad,

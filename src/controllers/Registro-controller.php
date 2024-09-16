@@ -27,7 +27,7 @@ include './src/models/Registro.model.php';
                 ResponseApi::enviarRespuesta(200,' Consulta realizada con éxito ', $consultar);    
              } else {
                http_response_code(400);
-                ResponseApi::enviarRespuesta(400,'No fue posible consultar los usuarios');
+                ResponseApi::enviarRespuesta(400,'No  hay usuarios registrados.');
              }
         }
       
