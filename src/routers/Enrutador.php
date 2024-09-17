@@ -91,7 +91,16 @@ class Enrutador {
                             ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
                         }
                         break;
-        
+                    case 'usuario-por-id':
+                            if ($methodHttp == 'GET' && isset($_GET['idUsuario'])) {
+                                $id = $_GET['idUsuario'];
+                                $clase = 'consultarUsuarioPorID';
+                                $arrayParametros = array("idUsuario" => $id);
+                                Enrutador::EnrutarControlador('Usuarios', $clase, $arrayParametros);
+                            } else {
+                                ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
+                            }
+                            break;
                     default:
                         return Enrutador::UrlInvalida();
                 }

@@ -12,7 +12,8 @@
                 'registro' ,
                 'consultar-usuarios' ,
                 "consultaid",
-                "consultar-roles"
+                "consultar-roles",
+                "usuario-por-id",
             );
         }
     }
