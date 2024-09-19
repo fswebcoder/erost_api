@@ -10,7 +10,7 @@ include './src/models/Registro.model.php';
             $this->registro = new RegistroModel();
             $registro = $this->registro->registro($parametros);
              if($registro){
-               http_response_code(200);
+                http_response_code(200);
                 ResponseApi::enviarRespuesta(200,'Registro exitoso', $registro);    
              } else {
                http_response_code(400);
@@ -19,9 +19,9 @@ include './src/models/Registro.model.php';
             
         }
 
-        public function consultarUsuario($parametros){
+        public function consultarUsuario(){
             $this->registro = new RegistroModel();
-            $consultar = $this->registro->consultarUsuarios($parametros);
+            $consultar = $this->registro->consultarUsuarios();
             if($consultar){
                http_response_code(200);
                 ResponseApi::enviarRespuesta(200,' Consulta realizada con éxito ', $consultar);    

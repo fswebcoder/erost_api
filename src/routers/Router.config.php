@@ -13,6 +13,8 @@
                 'consultar-usuarios' ,
                 "consultaid",
                 "consultar-roles",
+                "modelos",
+                "modelo-por-id",
                 "usuario-por-id",
             );
         }

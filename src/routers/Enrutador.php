@@ -81,16 +81,6 @@ class Enrutador {
                             Enrutador::EnrutarControlador('Rol', $clase, []);
                         }
                         break;
-                    case 'consultaid':
-                        if ($methodHttp == 'GET' && isset($_GET['id'])) {
-                            $id = $_GET['id'];
-                            $clase = 'consultarUsuarioPorId';
-                            $arrayParametros = array("id" => $id);
-                            Enrutador::EnrutarControlador('Registro', $clase, $arrayParametros);
-                        } else {
-                            ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
-                        }
-                        break;
                     case 'usuario-por-id':
                             if ($methodHttp == 'GET' && isset($_GET['idUsuario'])) {
                                 $id = $_GET['idUsuario'];
@@ -101,6 +91,15 @@ class Enrutador {
                                 ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
                             }
                             break;
+
+                    case 'modelos':
+                        if ($methodHttp == 'GET') {
+                            $clase = 'consultarModelos';
+                            Enrutador::EnrutarControlador('Modelos', $clase, []);
+                        } else {
+                            ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
+                        }
+                        break;
                     default:
                         return Enrutador::UrlInvalida();
                 }
@@ -119,6 +118,7 @@ class Enrutador {
         if (file_exists($controladorPath)) {
             require_once $controladorPath;
             if (class_exists($controlador)) {
+                
                 $controller = new $controlador;
                 if (method_exists($controller, $metodo)) {
                     return $controller->{$metodo}($parametros);
