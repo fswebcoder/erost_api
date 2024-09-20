@@ -14,6 +14,7 @@
                 "consultaid",
                 "consultar-roles",
                 "modelos",
+                "registro-modelo",
                 "modelo-por-id",
                 "usuario-por-id",
             );

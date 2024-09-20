@@ -100,6 +100,27 @@ class Enrutador {
                             ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
                         }
                         break;
+
+                    case 'registro-modelo':
+                            if ($methodHttp == 'POST') {
+                                $json = file_get_contents('php://input');
+                                $data = json_decode($json, true);
+                                if (isset($data['nombre']) && isset($data['edad']) && isset($data['email']) &&   isset($data['fotos'])) {
+                                    $nombre = $data['nombre'];
+                                    $edad = $data['edad'];
+                                    $email = $data['email'];
+                                    $fotos = $data['fotos'];
+                                    $arrayInfo = array("nombre" => $nombre, "edad" => $edad, "email" => $email  ,  "fotos" => $fotos);
+                                    $clase = 'registroModelo';
+
+                                    Enrutador::EnrutarControlador('Modelos', $clase, $arrayInfo);
+                                } else {
+                                    ResponseApi::enviarRespuesta(400, 'Bad Request, faltan datos');
+                                }
+                            } else {
+                                ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
+                            }
+                            break;
                     default:
                         return Enrutador::UrlInvalida();
                 }
