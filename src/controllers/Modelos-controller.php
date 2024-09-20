@@ -27,7 +27,7 @@
             $modelos = $this->modelos->consultarUsuariomodelos();
             if($modelos){
                 http_response_code(200);
-                ResponseApi::enviarRespuesta(200,'Consulta realizada con éxito', $usuario);    
+                ResponseApi::enviarRespuesta(200,'Consulta realizada con éxito', $modelos);    
             } else {
                 http_response_code(400);
                 ResponseApi::enviarRespuesta(400,'No se encontraron registros');

@@ -13,8 +13,8 @@
                 'consultar-usuarios' ,
                 "consultaid",
                 "consultar-roles",
-                "modelos",
                 "registro-modelo",
+                "consultar-modelos",
                 "modelo-por-id",
                 "usuario-por-id",
             );

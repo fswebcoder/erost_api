@@ -92,7 +92,7 @@ class Enrutador {
                             }
                             break;
 
-                    case 'modelos':
+                    case 'consultar-modelos':
                         if ($methodHttp == 'GET') {
                             $clase = 'consultarModelos';
                             Enrutador::EnrutarControlador('Modelos', $clase, []);
