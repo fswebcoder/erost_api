@@ -105,12 +105,14 @@ class Enrutador {
                             if ($methodHttp == 'POST') {
                                 $json = file_get_contents('php://input');
                                 $data = json_decode($json, true);
-                                if (isset($data['nombre']) && isset($data['edad']) && isset($data['email']) &&   isset($data['fotos'])) {
+                                if (isset($data['nombre']) && isset($data['edad']) && isset($data['email']) &&   isset($data['fotos'])  ) {
                                     $nombre = $data['nombre'];
                                     $edad = $data['edad'];
                                     $email = $data['email'];
                                     $fotos = $data['fotos'];
-                                    $arrayInfo = array("nombre" => $nombre, "edad" => $edad, "email" => $email  ,  "fotos" => $fotos);
+                                    $conocimientos = $data['conocimientos'];
+                                    $habilidades = $data['habilidades'];
+                                    $arrayInfo = array("nombre" => $nombre, "edad" => $edad, "email" => $email  ,  "fotos" => $fotos , "conocimientos" => $conocimientos , "habilidades" => $habilidades);
                                     $clase = 'registroModelo';
 
                                     Enrutador::EnrutarControlador('Modelos', $clase, $arrayInfo);
