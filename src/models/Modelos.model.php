@@ -284,7 +284,7 @@
             $exists = $stmtCheck->fetchColumn(); 
         
             if ($exists > 0) {
-                $queryUpdate = "UPDATE `ts_actitudes` SET `actitud_positiva` = :adaptabilidad WHERE `ts_modelo_idts_empleado` = :idts_empleado";
+                $queryUpdate = "UPDATE `ts_actitudes` SET `adaptabilidad` = :adaptabilidad WHERE `ts_modelo_idts_empleado` = :idts_empleado";
                 $stmtUpdate = $this->conn->prepare($queryUpdate);
                 $stmtUpdate->bindParam(':adaptabilidad', $dato, PDO::PARAM_STR);
                 $stmtUpdate->bindParam(':idts_empleado', $idts_empleado, PDO::PARAM_INT);
