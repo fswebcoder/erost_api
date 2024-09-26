@@ -93,17 +93,19 @@
         }
 
         public function consultarModelos() {
-            $query = "SELECT tsm.idts_empleado, tsm.nombre, tsm.edad, tsm.email, tsf.base64, 
+            $query = "SELECT tsm.idts_empleado, tsm.nombre, tsm.edad, tsm.email, tsf.idts_fotos, tsf.base64, 
                              tsc.nombre as conocimiento, tsc.descripcion as desc_conocimiento, 
-                             tshd.nombre as nom_habilidad, tshd.descripcion as desc_habilidad
+                             tshd.nombre as nom_habilidad, tshd.descripcion as desc_habilidad,
+                             tsa.actitud_positiva, tsa.profesionalismo, tsa.adaptabilidad
                       FROM ts_modelo as tsm
                       INNER JOIN ts_modelo_has_ts_fotos tshf ON tsm.idts_empleado = tshf.ts_modelo_idts_empleado
                       INNER JOIN ts_fotos as tsf ON tshf.ts_fotos_idts_fotos = tsf.idts_fotos
-                      INNER JOIN ts_modelo_has_ts_conocimientos  as tsmc ON tsm.idts_empleado = tsmc.ts_modelo_idts_empleado
-                      INNER JOIN ts_conocimientos as tsc  ON tsc.idts_conocimiento = tsmc.ts_conocimientos_idts_competencia
+                      INNER JOIN ts_modelo_has_ts_conocimientos as tsmc ON tsm.idts_empleado = tsmc.ts_modelo_idts_empleado
+                      INNER JOIN ts_conocimientos as tsc ON tsc.idts_conocimiento = tsmc.ts_conocimientos_idts_competencia
                       INNER JOIN ts_modelo_has_ts_habilidades as tsh ON tsm.idts_empleado = tsh.ts_modelo_idts_empleado
-                      INNER JOIN ts_habilidades as tshd ON tshd.idts_habilidades = tsh.ts_habilidades_idts_habilidades";
-            
+                      INNER JOIN ts_habilidades as tshd ON tshd.idts_habilidades = tsh.ts_habilidades_idts_habilidades
+                      INNER JOIN ts_actitudes tsa ON tsa.ts_modelo_idts_empleado = tsm.idts_empleado";
+        
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
         
@@ -111,11 +113,8 @@
         
             while ($fila = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $idts_empleado = $fila['idts_empleado'];
+                        $indiceEmpleado = array_search($idts_empleado, array_column($empleados, 'idts_empleado'));
         
-                // Buscar si el empleado ya está en el array
-                $indiceEmpleado = array_search($idts_empleado, array_column($empleados, 'idts_empleado'));
-        
-                // Si el empleado no está en el array, lo agregamos
                 if ($indiceEmpleado === false) {
                     $empleados[] = [
                         'idts_empleado' => $idts_empleado,
@@ -124,47 +123,189 @@
                         'email' => $fila['email'],
                         'fotos' => [],
                         'conocimientos' => [],
+                        "actitud_positiva" => $fila['actitud_positiva'],
+                        "profesionalismo" => $fila['profesionalismo'],
+                        "adaptabilidad" => $fila['adaptabilidad'],
                         'habilidades' => []
                     ];
                     $indiceEmpleado = array_key_last($empleados);
                 }
         
-                // Agregar las fotos
-                if (!in_array($fila['base64'], $empleados[$indiceEmpleado]['fotos'])) {
-                    $empleados[$indiceEmpleado]['fotos'][] = $fila['base64'];
+                $nuevaFoto = [
+                    'idts_fotos' => $fila['idts_fotos'],
+                    'base64' => $fila['base64']
+                ];
+        
+                if (!in_array($nuevaFoto, $empleados[$indiceEmpleado]['fotos'])) {
+                    $empleados[$indiceEmpleado]['fotos'][] = $nuevaFoto;
                 }
         
-                // Agregar los conocimientos
                 $nuevoConocimiento = [
                     'nombre' => $fila['conocimiento'],
                     'descripcion' => $fila['desc_conocimiento']
                 ];
         
-                // Verificar si el conocimiento ya fue agregado
                 if (!in_array($nuevoConocimiento, $empleados[$indiceEmpleado]['conocimientos'])) {
                     $empleados[$indiceEmpleado]['conocimientos'][] = $nuevoConocimiento;
                 }
         
-                // Agregar las habilidades
                 $nuevaHabilidad = [
                     'nombre' => $fila['nom_habilidad'],
                     'descripcion' => $fila['desc_habilidad']
                 ];
         
-                // Verificar si la habilidad ya fue agregada
                 if (!in_array($nuevaHabilidad, $empleados[$indiceEmpleado]['habilidades'])) {
                     $empleados[$indiceEmpleado]['habilidades'][] = $nuevaHabilidad;
                 }
             }
         
-            // Si no se encontraron empleados, devolver false
             if (empty($empleados)) {
                 return false;
             }
         
             return $empleados;
         }
-        
+
+        public function actualizarInformacionModelo($parametros){
+            $fechaActalizacion = date('Y-m-d H:i:s');
+            $idts_empleado = $parametros['idts_empleado'];
+            $nombre = $parametros['nombre'];
+            $edad = $parametros['edad'];
+            $email = $parametros['email'];
+
+            $query = "UPDATE `ts_modelo` SET `nombre` = :nombre, `edad` = :edad, `email` = :email, `fecha_actualizacion` = :fecha_actualizacion WHERE `idts_empleado` = :idts_empleado";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+            $stmt->bindParam(':edad', $edad, PDO::PARAM_INT);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->bindParam(':fecha_actualizacion', $fechaActalizacion, PDO::PARAM_STR);
+            $stmt->bindParam(':idts_empleado', $idts_empleado, PDO::PARAM_INT);
+
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
   
+        }
+
+        public function guardarActitud($parametros) {
+            $idts_empleado = $parametros['idts_empleado'];
+            $dato = $parametros['dato'];
+        
+            $stmtUpdate = null;
+            $stmtInsert = null;
+        
+            $queryCheck = "SELECT COUNT(*) FROM `ts_actitudes` WHERE `ts_modelo_idts_empleado` = :idts_empleado";
+            $stmtCheck = $this->conn->prepare($queryCheck);
+            $stmtCheck->bindParam(':idts_empleado', $idts_empleado, PDO::PARAM_INT);
+            $stmtCheck->execute();
+            
+            $exists = $stmtCheck->fetchColumn(); 
+            if ($exists > 0) {
+                $queryUpdate = "UPDATE `ts_actitudes` SET `actitud_positiva` = :actitud_positiva WHERE `ts_modelo_idts_empleado` = :idts_empleado";
+                $stmtUpdate = $this->conn->prepare($queryUpdate);
+                $stmtUpdate->bindParam(':actitud_positiva', $dato, PDO::PARAM_STR);
+                $stmtUpdate->bindParam(':idts_empleado', $idts_empleado, PDO::PARAM_INT);
+                $stmtUpdate->execute();
+                if ($stmtUpdate->rowCount() > 0) {
+                    return true;
+                }
+            } else {
+                $queryInsert = "INSERT INTO `ts_actitudes` (`ts_modelo_idts_empleado`, `actitud_positiva`) 
+                                VALUES (:idts_empleado, :actitud_positiva)";
+                $stmtInsert = $this->conn->prepare($queryInsert);
+                $stmtInsert->bindParam(':actitud_positiva', $dato, PDO::PARAM_STR);
+                $stmtInsert->bindParam(':idts_empleado', $idts_empleado, PDO::PARAM_INT);
+                $stmtInsert->execute();
+                if ($stmtInsert->rowCount() > 0) {
+                    return true;
+                }
+            }
+        
+            return false;
+        }
+        
+         
+
+        public function  guardarProfesionalismo($parametros){
+            $idts_empleado = $parametros['idts_empleado'];
+            $dato = $parametros['dato'];
+        
+            $stmtUpdate = null;
+            $stmtInsert = null;
+        
+            $queryCheck = "SELECT COUNT(*) FROM `ts_actitudes` WHERE `ts_modelo_idts_empleado` = :idts_empleado";
+            $stmtCheck = $this->conn->prepare($queryCheck);
+            $stmtCheck->bindParam(':idts_empleado', $idts_empleado, PDO::PARAM_INT);
+            $stmtCheck->execute();
+            
+            $exists = $stmtCheck->fetchColumn(); 
+        
+            if ($exists > 0) {
+                $queryUpdate = "UPDATE `ts_actitudes` SET `profesionalismo` = :profesionalismo WHERE `ts_modelo_idts_empleado` = :idts_empleado";
+                $stmtUpdate = $this->conn->prepare($queryUpdate);
+                $stmtUpdate->bindParam(':profesionalismo', $dato, PDO::PARAM_STR);
+                $stmtUpdate->bindParam(':idts_empleado', $idts_empleado, PDO::PARAM_INT);
+                $stmtUpdate->execute();
+                if ($stmtUpdate->rowCount() > 0) {
+                    return true;
+                }
+            } else {
+                $queryInsert = "INSERT INTO `ts_actitudes` (`ts_modelo_idts_empleado`, `profesionalismo`) 
+                                VALUES (:idts_empleado, :profesionalismo)";
+                $stmtInsert = $this->conn->prepare($queryInsert);
+                $stmtInsert->bindParam(':profesionalismo', $dato, PDO::PARAM_STR);
+                $stmtInsert->bindParam(':idts_empleado', $idts_empleado, PDO::PARAM_INT);
+                $stmtInsert->execute();
+                if ($stmtInsert->rowCount() > 0) {
+                    return true;
+                }
+            }
+        
+          return false;
+  
+        }
+
+        public function  guardarAdaptabilidad($parametros){
+            $idts_empleado = $parametros['idts_empleado'];
+            $dato = $parametros['dato'];
+        
+            $stmtUpdate = null;
+            $stmtInsert = null;
+        
+            $queryCheck = "SELECT COUNT(*) FROM `ts_actitudes` WHERE `ts_modelo_idts_empleado` = :idts_empleado";
+            $stmtCheck = $this->conn->prepare($queryCheck);
+            $stmtCheck->bindParam(':idts_empleado', $idts_empleado, PDO::PARAM_INT);
+            $stmtCheck->execute();
+            
+            $exists = $stmtCheck->fetchColumn(); 
+        
+            if ($exists > 0) {
+                $queryUpdate = "UPDATE `ts_actitudes` SET `actitud_positiva` = :adaptabilidad WHERE `ts_modelo_idts_empleado` = :idts_empleado";
+                $stmtUpdate = $this->conn->prepare($queryUpdate);
+                $stmtUpdate->bindParam(':adaptabilidad', $dato, PDO::PARAM_STR);
+                $stmtUpdate->bindParam(':idts_empleado', $idts_empleado, PDO::PARAM_INT);
+                $stmtUpdate->execute();
+                if ($stmtUpdate->rowCount() > 0) {
+                    return true;
+                }
+            } else {
+                $queryInsert = "INSERT INTO `ts_actitudes` (`ts_modelo_idts_empleado`, `adaptabilidad`) 
+                                VALUES (:idts_empleado, :adaptabilidad)";
+                $stmtInsert = $this->conn->prepare($queryInsert);
+                $stmtInsert->bindParam(':adaptabilidad', $dato, PDO::PARAM_STR);
+                $stmtInsert->bindParam(':idts_empleado', $idts_empleado, PDO::PARAM_INT);
+                $stmtInsert->execute();
+                if ($stmtInsert->rowCount() > 0) {
+                    return true;
+                }
+            }
+        
+            return false;
+  
+        }
 
     }

@@ -17,6 +17,9 @@
                 "consultar-modelos",
                 "modelo-por-id",
                 "usuario-por-id",
+                "comentario-monitor",
+                "actualizar-informacion",
+                "guardar-actitudes"
             );
         }
     }
