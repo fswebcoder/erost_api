@@ -74,5 +74,56 @@
                 ResponseApi::enviarRespuesta(400,'No fue posible  registrar la información');
             }
         }
-  
+
+        public function actualizarFotoModelo($parametros){
+            $this->modelos = new ModelosModel();
+            $actualizar = $this->modelos->actualizarFotoModelo($parametros);
+            if($actualizar){
+                ResponseApi::enviarRespuesta(200,'Actualización realizada con éxito', $actualizar);    
+            } else {
+                ResponseApi::enviarRespuesta(400,'No fue posible actualizar la información');
+            }
+        }   
+        
+
+        public function nuevoConocimiento($parametros){
+            $this->modelos = new ModelosModel();
+            $gaurdar = $this->modelos->nuevoConocimiento($parametros);
+            if($gaurdar){
+                ResponseApi::enviarRespuesta(200,'Registro almacenado', $gaurdar);    
+            } else {
+                ResponseApi::enviarRespuesta(400,'No fue posible  registrar la información');
+            }
+        }
+
+        public function registrarHabilidad($parametros){
+            $this->modelos = new ModelosModel();
+            $gaurdar = $this->modelos->registrarHabilidad($parametros);
+            if($gaurdar){
+                ResponseApi::enviarRespuesta(200,'Registro almacenado', $gaurdar);    
+            } else {
+                ResponseApi::enviarRespuesta(400,'No fue posible  registrar la información');
+            }
+        }  
+        
+        public function eliminarConocimiento($parametros){
+            $this->modelos = new ModelosModel();
+            $eliminar = $this->modelos->eliminarConocimiento($parametros);
+            if($eliminar){
+                ResponseApi::enviarRespuesta(200,'Registro eliminado', $eliminar);    
+            } else {
+                ResponseApi::enviarRespuesta(400,'No fue posible  eliminar la información');
+            }
+        }
+
+        public function eliminarHabilidad($parametros){
+            $this->modelos = new ModelosModel();
+            $eliminarHabilidad = $this->modelos->eliminarHabilidad($parametros);
+            if($eliminarHabilidad){
+                ResponseApi::enviarRespuesta('Registro eliminado', $eliminarHabilidad);    
+            } else {
+                ResponseApi::enviarRespuesta(400,'No fue posible  eliminar la información');
+            }
+        }
+
     }

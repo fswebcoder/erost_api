@@ -19,7 +19,17 @@
                 "usuario-por-id",
                 "comentario-monitor",
                 "actualizar-informacion",
-                "guardar-actitudes"
+                "guardar-actitudes",
+                "cambiar-contrasena",
+                "actualizar-foto-modelo",
+                "nuevo-conocimiento",
+                "nueva-habilidad",
+                "actualizar-conocimiento",
+                "actualizar-habilidad",
+                "eliminar-conocimiento",
+                "eliminar-habilidad",
+                "consultar-notificaciones",
+                "notificacion-leida"
             );
         }
     }
