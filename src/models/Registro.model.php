@@ -81,7 +81,9 @@ class RegistroModel
                 e.edad,
                 e.foto as foto,
                 u.email AS email_usuario,
-                r.tipo_rol AS rol
+                r.tipo_rol AS rol,
+                u.estado
+
             FROM 
                 ts_empleado e
             JOIN ts_usuario_has_ts_empleado ue ON e.idts_empleado = ue.ts_empleado_idts_empleado
@@ -129,8 +131,23 @@ class RegistroModel
                 return false;
             }
 
-           
-        
     }
 
+    public function inactivarUsuario($parametros)
+    {
+        try {
+            $query = "UPDATE ts_usuario SET estado = :estado WHERE idts_usuario = :idts_empleado";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':idts_empleado', $parametros['idts_empleado'], PDO::PARAM_INT);
+            $stmt->bindParam(':estado', $parametros['estado'], PDO::PARAM_STR);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $exception) {
+            echo "Error al realizar la consulta: " . $exception->getMessage();
+            return false;
+        }
+    }
 }
+
+    
+

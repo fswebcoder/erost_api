@@ -24,12 +24,12 @@
                 "actualizar-foto-modelo",
                 "nuevo-conocimiento",
                 "nueva-habilidad",
-                "actualizar-conocimiento",
-                "actualizar-habilidad",
                 "eliminar-conocimiento",
                 "eliminar-habilidad",
                 "consultar-notificaciones",
-                "notificacion-leida"
+                "editar-conocimiento",
+                "editar-habilidad",
+                "inactivar-usuario"
             );
         }
     }

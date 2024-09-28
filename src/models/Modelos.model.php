@@ -391,6 +391,26 @@
                 return false; // No se eliminaron filas
             }
         }
+
+        public function editarConocimiento($parametros){
+            $query = "UPDATE `ts_conocimientos` SET `nombre` = :nombre, `descripcion` = :descripcion WHERE `idts_conocimiento` = :idts_conocimiento";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':nombre', $parametros['nombre'], PDO::PARAM_STR);
+            $stmt->bindParam(':descripcion', $parametros['descripcion'], PDO::PARAM_STR);
+            $stmt->bindParam(':idts_conocimiento', $parametros['idts_conocimiento'], PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->rowCount();
+        }
+
+        public function editarHabilidad($parametros){
+            $query = "UPDATE `ts_habilidades` SET `nombre` = :nombre, `descripcion` = :descripcion WHERE `idts_habilidades` = :idts_habilidades";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':nombre', $parametros['nombre'], PDO::PARAM_STR);
+            $stmt->bindParam(':descripcion', $parametros['descripcion'], PDO::PARAM_STR);
+            $stmt->bindParam(':idts_habilidades', $parametros['idts_habilidad'], PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->rowCount();
+        }
         
         
  }

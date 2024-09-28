@@ -362,6 +362,62 @@ class Enrutador {
                                     ResponseApi::enviarRespuesta(400, 'Bad Request, método HTTP no permitido');
                                 }
                                 break;
+                        case 'editar-conocimiento':
+                            if ($methodHttp == 'POST') {
+                                $inputData = file_get_contents('php://input');
+                                $data = json_decode($inputData, true);
+
+                                if (isset($data['idts_conocimiento']) && isset($data['nombre'])  && isset($data['descripcion'])  ) {
+                                    $idts_conocimiento = $data['idts_conocimiento'];
+                                    $nombre = $data['nombre'];
+                                    $descripcion = $data['descripcion'];
+                                    $clase = 'editarConocimiento';
+                                    $arrayParametros = array("idts_conocimiento" => $idts_conocimiento, "nombre" => $nombre, "descripcion" => $descripcion);
+                                    Enrutador::EnrutarControlador('Modelos', $clase, $arrayParametros);
+                                } else {
+                                    ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
+                                }
+                            } else {
+                                ResponseApi::enviarRespuesta(400, 'Bad Request, método HTTP no permitido');
+                            }
+                            break;
+                    case 'editar-habilidad':
+                        if ($methodHttp == 'POST') {
+                            $inputData = file_get_contents('php://input');
+                            $data = json_decode($inputData, true);
+
+                            if (isset($data['idts_habilidad']) && isset($data['nombre'])  && isset($data['descripcion'])  ) {
+                                $idts_habilidad = $data['idts_habilidad'];
+                                $nombre = $data['nombre'];
+                                $descripcion = $data['descripcion'];
+                                $clase = 'editarHabilidad';
+                                $arrayParametros = array("idts_habilidad" => $idts_habilidad, "nombre" => $nombre, "descripcion" => $descripcion);
+                                Enrutador::EnrutarControlador('Modelos', $clase, $arrayParametros);
+                            } else {
+                                ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
+                            }
+                        } else {
+                            ResponseApi::enviarRespuesta(400, 'Bad Request, método HTTP no permitido');
+                        }
+                        break;
+                    case 'inactivar-usuario':
+                        if ($methodHttp == 'PUT') {
+                            $inputData = file_get_contents('php://input');
+                            $data = json_decode($inputData, true);
+
+                            if (isset($data['idts_empleado']) && isset($data['estado'])  ) {
+                                $idts_empleado = $data['idts_empleado'];
+                                $estado = $data['estado'];
+                                $clase = 'inactivarUsuario';
+                                $arrayParametros = array("idts_empleado" => $idts_empleado, "estado" => $estado);
+                                Enrutador::EnrutarControlador('Registro', $clase, $arrayParametros);
+                            } else {
+                                ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
+                            }
+                        } else {
+                            ResponseApi::enviarRespuesta(400, 'Bad Request, método HTTP no permitido');
+                        }
+                        break;
                     default:
                         return Enrutador::UrlInvalida();
                 }

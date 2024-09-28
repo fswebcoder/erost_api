@@ -45,4 +45,16 @@ include './src/models/Registro.model.php';
         }
 
 
+        public function inactivarUsuario($parametros){
+            $this->registro = new RegistroModel();
+            $inactivar = $this->registro->inactivarUsuario($parametros);
+            if($inactivar){
+               http_response_code(200);
+                ResponseApi::enviarRespuesta(200,'Usuario inactivado con éxito', $inactivar);    
+             } else {
+               http_response_code(400);
+                ResponseApi::enviarRespuesta(400,'No fue posible inactivar el usuario');
+             }
+        }
+
     }

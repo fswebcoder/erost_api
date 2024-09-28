@@ -126,4 +126,24 @@
             }
         }
 
+        public function editarConocimiento($parametros){
+            $this->modelos = new ModelosModel();
+            $editar = $this->modelos->editarConocimiento($parametros);
+            if($editar){
+                ResponseApi::enviarRespuesta(200,'Registro actualizado', $editar);    
+            } else {
+                ResponseApi::enviarRespuesta(400,'No fue posible  actualizar la información');
+            }
+        }
+
+        public function editarHabilidad($parametros){
+            $this->modelos = new ModelosModel();
+            $editar = $this->modelos->editarHabilidad($parametros);
+            if($editar){
+                ResponseApi::enviarRespuesta(200,'Registro actualizado', $editar);    
+            } else {
+                ResponseApi::enviarRespuesta(400,'No fue posible  actualizar la información');
+            }
+        }
+
     }

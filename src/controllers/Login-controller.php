@@ -13,14 +13,14 @@
           
 
 
-            if ($user) {
-                if (password_verify($password, $user['contrasena'])) {
+            if ($user)  {
+                if (password_verify($password, $user['contrasena']) && $user['estado'] == 'ACTIVO') {
                     unset($user['contrasena']);
                     ResponseApi::enviarRespuesta(200, 'Login correcto',$user);
                     
                 } else {
                     http_response_code(401);
-                    ResponseApi::enviarRespuesta(401, 'Datos de conexiónm incorrectos');
+                    ResponseApi::enviarRespuesta(401, 'Datos de conexiónm incorrectos o usuario inactivo');
                 }
             } else {
                 ResponseApi::enviarRespuesta(400, 'Usuario no encontrado');
