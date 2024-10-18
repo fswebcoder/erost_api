@@ -436,6 +436,24 @@ class Enrutador {
                                 ResponseApi::enviarRespuesta(400, 'Bad Request, método HTTP no permitido');
                             }
                             break;
+                            case 'eliminar-foto':
+                                if ($methodHttp == 'POST') {
+                                    $inputData = file_get_contents('php://input');
+                                    $data = json_decode($inputData, true);
+        
+                                    if (isset($data['idts_fotos'])  ) {
+                                        $idts_fotos = $data['idts_fotos'];
+                                      
+                                        $clase = 'eliminarFoto';
+                                        $arrayParametros = array("idts_fotos" => $idts_fotos);
+                                        Enrutador::EnrutarControlador('Modelos', $clase, $arrayParametros);
+                                    } else {
+                                        ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
+                                    }
+                                } else {
+                                    ResponseApi::enviarRespuesta(400, 'Bad Request, método HTTP no permitido');
+                                }
+                                break;
                     default:
                         return Enrutador::UrlInvalida();
                 }

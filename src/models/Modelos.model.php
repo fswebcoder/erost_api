@@ -450,5 +450,27 @@
 
         }
         
+
+        public function eliminarFoto($parametros){
+
+            $query = "DELETE FROM `ts_modelo_has_ts_fotos` WHERE `ts_fotos_idts_fotos` = :ts_fotos_idts_fotos";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':ts_fotos_idts_fotos', $parametros['idts_fotos'], PDO::PARAM_INT);
+            $stmt->execute();
+
+            
+            $query = "DELETE FROM `ts_fotos` WHERE `idts_fotos` = :idts_fotos";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':idts_fotos', $parametros['idts_fotos'], PDO::PARAM_INT);
+            $stmt->execute();
+
+         
+
+            if ( $stmt->execute()) {
+                return true; // Éxito
+            } else {
+                return false; // No se eliminaron filas
+            }
+        }
         
  }

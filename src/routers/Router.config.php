@@ -31,7 +31,8 @@
                 "editar-habilidad",
                 "inactivar-usuario",
                 "notificacion-leida",
-                "eliminar-modelo"
+                "eliminar-modelo",
+                "eliminar-foto"
             );
         }
     }
