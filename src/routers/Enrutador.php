@@ -418,6 +418,24 @@ class Enrutador {
                             ResponseApi::enviarRespuesta(400, 'Bad Request, método HTTP no permitido');
                         }
                         break;
+                    case 'eliminar-modelo':
+                            if ($methodHttp == 'POST') {
+                                $inputData = file_get_contents('php://input');
+                                $data = json_decode($inputData, true);
+    
+                                if (isset($data['idts_empleado'])  ) {
+                                    $idts_empleado = $data['idts_empleado'];
+                                  
+                                    $clase = 'eliminarModelo';
+                                    $arrayParametros = array("idts_empleado" => $idts_empleado);
+                                    Enrutador::EnrutarControlador('Modelos', $clase, $arrayParametros);
+                                } else {
+                                    ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
+                                }
+                            } else {
+                                ResponseApi::enviarRespuesta(400, 'Bad Request, método HTTP no permitido');
+                            }
+                            break;
                     default:
                         return Enrutador::UrlInvalida();
                 }

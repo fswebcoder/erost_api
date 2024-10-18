@@ -23,7 +23,7 @@
                     ResponseApi::enviarRespuesta(401, 'Datos de conexiónm incorrectos o usuario inactivo');
                 }
             } else {
-                ResponseApi::enviarRespuesta(400, 'Usuario no encontrado');
+                ResponseApi::enviarRespuesta(400, 'Datos de conexión incorrectos');
             }
         }
 

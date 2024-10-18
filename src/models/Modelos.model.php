@@ -411,6 +411,44 @@
             $stmt->execute();
             return $stmt->rowCount();
         }
+
+        public function eliminarModelo($parametros){
+            $query = "DELETE FROM `ts_modelo_has_ts_conocimientos` WHERE `ts_modelo_idts_empleado` = :ts_modelo_idts_empleado";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':ts_modelo_idts_empleado', $parametros['idts_empleado'], PDO::PARAM_INT);
+            $stmt->execute();
+
+            $query = "DELETE FROM `ts_modelo_has_ts_habilidades` WHERE `ts_modelo_idts_empleado` = :ts_modelo_idts_empleado ";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':ts_modelo_idts_empleado', $parametros['idts_empleado'], PDO::PARAM_INT);
+            $stmt->execute();
+
+            $query = "DELETE FROM `ts_modelo_has_ts_fotos` WHERE `ts_modelo_idts_empleado` = :ts_modelo_idts_empleado ";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':ts_modelo_idts_empleado', $parametros['idts_empleado'], PDO::PARAM_INT);
+            $stmt->execute();
+
+            $query = "DELETE FROM `ts_actitudes` WHERE `ts_modelo_idts_empleado` = :ts_modelo_idts_empleado";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':ts_modelo_idts_empleado', $parametros['idts_empleado'], PDO::PARAM_INT);
+            $stmt->execute();
+
+            $query = "DELETE FROM `ts_modelo` WHERE `idts_empleado` = :idts_empleado";
+            $stmt1 = $this->conn->prepare($query);
+            $stmt1->bindParam(':idts_empleado', $parametros['idts_empleado'], PDO::PARAM_INT);
+            $stmt1->execute();
+
+         
+
+        
+            if ( $stmt1->execute()) {
+                return true; // Éxito
+            } else {
+                return false; // No se eliminaron filas
+            }
+
+
+        }
         
         
  }

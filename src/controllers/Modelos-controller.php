@@ -146,4 +146,14 @@
             }
         }
 
+        public function eliminarModelo($parametros){
+            $this->modelos = new ModelosModel();
+            $eliminar = $this->modelos->eliminarModelo($parametros);
+            if($eliminar){
+                ResponseApi::enviarRespuesta(200,'Registro eliminado', $eliminar);    
+            } else {
+                ResponseApi::enviarRespuesta(400,'No fue posible  eliminar la información');
+            }
+        }
+
     }

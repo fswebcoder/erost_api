@@ -29,7 +29,9 @@
                 "consultar-notificaciones",
                 "editar-conocimiento",
                 "editar-habilidad",
-                "inactivar-usuario"
+                "inactivar-usuario",
+                "notificacion-leida",
+                "eliminar-modelo"
             );
         }
     }
