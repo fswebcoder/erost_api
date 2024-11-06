@@ -25,4 +25,58 @@
             return $stmt->rowCount();
 
         }
-    }
+
+
+        public function registrarComentarioAdnmin($idts_modelo,$nombre, $descripcion, $tipo_comentario){
+
+            $fechaRegistro = date('Y-m-d H:i:s');
+
+            if($tipo_comentario == 'conocimiento'){
+                $query = "INSERT INTO `ts_conocimientos` (`nombre`, `descripcion`) VALUES (:nombre, :descripcion)";
+                $stmt = $this->conn->prepare($query);
+                $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+                $stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
+                $stmt->execute();
+    
+                $lastId = $this->conn->lastInsertId();
+    
+                $query = "INSERT INTO `ts_modelo_has_ts_conocimientos`(`ts_modelo_idts_empleado`, `ts_conocimientos_idts_competencia`) VALUES (:ts_modelo_idts_empleado, :ts_conocimientos_idts_competencia)";
+                $stmt = $this->conn->prepare($query);
+                $stmt->bindParam(':ts_modelo_idts_empleado', $idts_modelo, PDO::PARAM_INT); 
+                $stmt->bindParam(':ts_conocimientos_idts_competencia', $lastId, PDO::PARAM_INT); 
+                $stmt->execute();
+    
+                if($stmt->rowCount() > 0){
+                    return true;
+                } else {
+                    return false;
+                }
+
+            } else {
+                $query = "INSERT INTO `ts_habilidades` (`nombre`, `descripcion`) VALUES (:nombre, :descripcion)";
+                $stmt = $this->conn->prepare($query);
+                $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+                $stmt->bindParam(':descripcion',$descripcion, PDO::PARAM_STR);
+                $stmt->execute();
+    
+                $lastId = $this->conn->lastInsertId();
+    
+                $query = "INSERT INTO `ts_modelo_has_ts_habilidades`(`ts_modelo_idts_empleado`, `ts_habilidades_idts_habilidades`) VALUES (:ts_modelo_idts_empleado, :ts_habilidades_idts_habilidades)";
+                $stmt = $this->conn->prepare($query);
+                $stmt->bindParam(':ts_modelo_idts_empleado', $idts_modelo, PDO::PARAM_INT); 
+                $stmt->bindParam(':ts_habilidades_idts_habilidades', $lastId, PDO::PARAM_INT); 
+                $stmt->execute();
+    
+                if($stmt->rowCount() > 0){
+                    return true;
+                } else {
+                    return false;
+                }
+
+                
+            }
+
+
+        }
+
+    } 

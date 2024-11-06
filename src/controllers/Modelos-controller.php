@@ -11,9 +11,11 @@
             $edad = $parametros['edad'];
             $email = $parametros['email'];
             $fotos = $parametros['fotos'];
+            $horaInicio = $parametros['horaInicio'];
+            $horaFin = $parametros['horaFin'];
             $conocimientos = $parametros['conocimientos'];
             $habilidades = $parametros['habilidades'];
-            $registro = $this->modelos->registrarModelo($nombre, $edad, $email, $fotos, $conocimientos, $habilidades);
+            $registro = $this->modelos->registrarModelo($nombre, $edad, $email, $fotos, $horaInicio, $horaFin, $conocimientos, $habilidades);
             if($registro){
                 http_response_code(200);
                 ResponseApi::enviarRespuesta(200,'Registro exitoso', $registro);    
@@ -163,6 +165,28 @@
                 ResponseApi::enviarRespuesta(200,'Registro eliminado', $eliminar);    
             } else {
                 ResponseApi::enviarRespuesta(400,'No fue posible  eliminar la información');
+            }
+        }
+
+        public function nuevaFoto($parametros){
+            $this->modelos = new ModelosModel();
+            $idts_empleado = $parametros['idts_empleado'];
+            $fotos = $parametros['fotos'];
+            $guardar = $this->modelos->nuevaFoto($idts_empleado, $fotos);
+            if($guardar){
+                ResponseApi::enviarRespuesta(200,'Registro almacenado', $guardar);    
+            } else {
+                ResponseApi::enviarRespuesta(400,'No fue posible  registrar la información');
+            }
+        }
+
+        public function filtrarModelos($parametros){
+            $this->modelos = new ModelosModel();
+            $filtro = $this->modelos->filtrarModelos($parametros);
+            if($filtro){
+                ResponseApi::enviarRespuesta(200,'Consulta realizada con éxito', $filtro);    
+            } else {
+                ResponseApi::enviarRespuesta(400,'No se encontraron registros');
             }
         }
 

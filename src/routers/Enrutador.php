@@ -111,14 +111,16 @@ class Enrutador {
                             if ($methodHttp == 'POST') {
                                 $json = file_get_contents('php://input');
                                 $data = json_decode($json, true);
-                                if (isset($data['nombre']) && isset($data['edad']) && isset($data['email']) &&   isset($data['fotos'])  ) {
+                                if (isset($data['nombre']) && isset($data['edad']) && isset($data['email']) && isset($data['fotos']) && isset($data['horaInicio']) && isset($data['horaFin']))  {
                                     $nombre = $data['nombre'];
                                     $edad = $data['edad'];
                                     $email = $data['email'];
+                                    $horaInicio = $data['horaInicio'];
+                                    $horaFin = $data['horaFin'];
                                     $fotos = $data['fotos'];
                                     $conocimientos = $data['conocimientos'];
                                     $habilidades = $data['habilidades'];
-                                    $arrayInfo = array("nombre" => $nombre, "edad" => $edad, "email" => $email  ,  "fotos" => $fotos , "conocimientos" => $conocimientos , "habilidades" => $habilidades);
+                                    $arrayInfo = array("nombre" => $nombre, "edad" => $edad, "email" => $email  ,  "fotos" => $fotos , "conocimientos" => $conocimientos , "habilidades" => $habilidades, "horaInicio" => $horaInicio, "horaFin" => $horaFin);
                                     $clase = 'registroModelo';
 
                                     Enrutador::EnrutarControlador('Modelos', $clase, $arrayInfo);
@@ -159,13 +161,15 @@ class Enrutador {
                         if ($methodHttp == 'PUT') {
                             $json = file_get_contents('php://input');
                             $data = json_decode($json, true);
-                            if (isset($data['nombre']) && isset($data['email']) && isset($data['edad']) && isset($data['idts_empleado'])) {
+                            if (isset($data['nombre']) && isset($data['email']) && isset($data['edad']) && isset($data['idts_empleado']) && isset($data['fechaInicio']) && isset($data['fechaFin'])) {
                                 $nombre = $data['nombre'];
                                 $email = $data['email'];
                                 $edad = $data['edad'];
+                                $fechaInicio = $data['fechaInicio'];
+                                $fechaFin = $data['fechaFin'];
                                 $idts_empleado = $data['idts_empleado'];
                                 $clase = 'actualziarInformacionModelo';
-                                $arrayInfo = array("nombre" => $nombre, "email" => $email, "edad" => $edad, "idts_empleado" => $idts_empleado);
+                                $arrayInfo = array("nombre" => $nombre, "email" => $email, "edad" => $edad, "idts_empleado" => $idts_empleado, "fechaInicio" => $fechaInicio, "fechaFin" => $fechaFin);
                                 Enrutador::EnrutarControlador('Modelos', $clase, $arrayInfo);
                             } else {
                                 ResponseApi::enviarRespuesta(400, 'Bad Request, faltan datos');
@@ -436,24 +440,84 @@ class Enrutador {
                                 ResponseApi::enviarRespuesta(400, 'Bad Request, método HTTP no permitido');
                             }
                             break;
-                            case 'eliminar-foto':
-                                if ($methodHttp == 'POST') {
-                                    $inputData = file_get_contents('php://input');
-                                    $data = json_decode($inputData, true);
-        
-                                    if (isset($data['idts_fotos'])  ) {
-                                        $idts_fotos = $data['idts_fotos'];
-                                      
-                                        $clase = 'eliminarFoto';
-                                        $arrayParametros = array("idts_fotos" => $idts_fotos);
-                                        Enrutador::EnrutarControlador('Modelos', $clase, $arrayParametros);
-                                    } else {
-                                        ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
-                                    }
-                                } else {
-                                    ResponseApi::enviarRespuesta(400, 'Bad Request, método HTTP no permitido');
-                                }
-                                break;
+                    case 'eliminar-foto':
+                        if ($methodHttp == 'POST') {
+                            $inputData = file_get_contents('php://input');
+                            $data = json_decode($inputData, true);
+
+                            if (isset($data['idts_fotos'])  ) {
+                                $idts_fotos = $data['idts_fotos'];
+                                
+                                $clase = 'eliminarFoto';
+                                $arrayParametros = array("idts_fotos" => $idts_fotos);
+                                Enrutador::EnrutarControlador('Modelos', $clase, $arrayParametros);
+                            } else {
+                                ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
+                            }
+                        } else {
+                            ResponseApi::enviarRespuesta(400, 'Bad Request, método HTTP no permitido');
+                        }
+                        break;
+                    case 'nueva-foto':
+                        if ($methodHttp == 'POST') {
+                            $json = file_get_contents('php://input');
+                            $data = json_decode($json, true);
+                            if (isset($data['idts_empleado']) &&   isset($data['fotos'])  ) {
+                                $idts_empleado = $data['idts_empleado'];
+                                $fotos = $data['fotos'];
+                                $arrayInfo = array("idts_empleado" => $idts_empleado,  "fotos" => $fotos);
+                                $clase = 'nuevaFoto';
+
+                                Enrutador::EnrutarControlador('Modelos', $clase, $arrayInfo);
+                            } else {
+                                ResponseApi::enviarRespuesta(400, 'Bad Request, faltan datos');
+                            }
+                        } else {
+                            ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
+                        }
+                    break;
+                    case 'comentario-admin':
+                        if ($methodHttp == 'POST') {
+                            $json = file_get_contents('php://input');
+                            $data = json_decode($json, true);
+                            if (isset($data['idts_modelo']) && isset($data['nombre']) && isset($data['descripcion']) && isset($data['tipo_comentario'])) {
+                                $idts_modelo = $data['idts_modelo'];
+                                $nombre = $data['nombre'];
+                                $descripcion = $data['descripcion'];
+                                $tipo_comentario = $data['tipo_comentario']; 
+                                $clase = 'guardarComentarioAdmin';
+
+                                $arrayInfo = array(
+                                    "idts_modelo" => $idts_modelo,
+                                    "nombre" => $nombre,
+                                    "descripcion" => $descripcion,
+                                    "tipo_comentario" => $tipo_comentario
+                                );
+                                Enrutador::EnrutarControlador('Monitor', $clase, $arrayInfo);
+                            } else {
+                                ResponseApi::enviarRespuesta(400, 'Bad Request, faltan datos');
+                            }
+                        } else {
+                            ResponseApi::enviarRespuesta(400, 'Bad Request, método no permitido');
+                        }
+                        
+                    break;
+                    case 'filtrar-modelos':
+                        if ($methodHttp == 'POST') {
+                            $json = file_get_contents('php://input');
+                            $data = json_decode($json, true);
+                            if (isset($data['busqueda'])) {
+                                $parametro = $data['busqueda'];
+                                $clase = 'filtrarModelos';
+                                Enrutador::EnrutarControlador('Modelos', $clase, ["busqueda" => $parametro]);
+                            } else {
+                                ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro id');
+                            }
+                            Enrutador::EnrutarControlador('Modelos', $clase, []);
+                        } else {
+                            ResponseApi::enviarRespuesta(400, 'Bad Request, falta el parámetro');
+                        }
+                        break;
                     default:
                         return Enrutador::UrlInvalida();
                 }

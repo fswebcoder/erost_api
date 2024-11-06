@@ -32,7 +32,10 @@
                 "inactivar-usuario",
                 "notificacion-leida",
                 "eliminar-modelo",
-                "eliminar-foto"
+                "eliminar-foto",
+                "nueva-foto",
+                "comentario-admin",
+                "filtrar-modelos",
             );
         }
     }

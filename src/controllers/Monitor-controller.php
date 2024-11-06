@@ -21,4 +21,21 @@
                 ResponseApi::enviarRespuesta(400,'No fue posible registrar el comentario');
             }
         }
+
+
+        public function guardarComentarioAdmin($parametros){
+            $this->monitor = new MonitorModel();
+            $idts_modelo = $parametros['idts_modelo'];
+            $nombre = $parametros['nombre'];
+            $descripcion = $parametros['descripcion'];
+            $tipo_comentario = $parametros['tipo_comentario'];
+            $registro = $this->monitor->registrarComentarioAdnmin($idts_modelo, $nombre, $descripcion, $tipo_comentario);
+           
+            if($registro){
+                ResponseApi::enviarRespuesta(200,'Registro exitoso', $registro);    
+            } else {
+                ResponseApi::enviarRespuesta(400,'No fue posible registrar el comentario');
+            }
+        }
+
     }
