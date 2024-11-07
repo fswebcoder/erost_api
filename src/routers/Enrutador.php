@@ -135,9 +135,10 @@ class Enrutador {
                         if ($methodHttp == 'POST') {
                             $json = file_get_contents('php://input');
                             $data = json_decode($json, true);
-                            if (isset($data['idts_modelo']) && isset($data['nombre_registrador']) && isset($data['descripcion']) && isset($data['tipo_comentario'])) {
+                            if (isset($data['idts_modelo']) && isset($data['nombre_registrador']) && isset($data['nombre']) && isset($data['descripcion']) && isset($data['tipo_comentario'])) {
                                 $idts_modelo = $data['idts_modelo'];
                                 $nombre_registrador = $data['nombre_registrador'];
+                                $nombre = $data['nombre'];
                                 $descripcion = $data['descripcion'];
                                 $tipo_comentario = $data['tipo_comentario']; 
                                 $clase = 'guardarComentarioMonitor';
@@ -145,6 +146,7 @@ class Enrutador {
                                 $arrayInfo = array(
                                     "idts_modelo" => $idts_modelo,
                                     "nombre_registrador" => $nombre_registrador,
+                                    "nombre" => $nombre,
                                     "descripcion" => $descripcion,
                                     "tipo_comentario" => $tipo_comentario
                                 );
