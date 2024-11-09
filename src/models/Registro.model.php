@@ -25,7 +25,7 @@ class RegistroModel
             $stmt->bindParam(':nombre', $data['nombre'], PDO::PARAM_STR);
             $stmt->bindParam(':cargo', $data['cargo'], PDO::PARAM_STR);
             $stmt->bindParam(':edad', $data['edad'], PDO::PARAM_INT);
-            $stmt->bindParam(':foto', $data[' foto'], PDO::PARAM_INT);
+            $stmt->bindParam(':foto', $data['foto'], PDO::PARAM_STR);
             $stmt->bindParam(':fecha_registro', $fechaRegistro, PDO::PARAM_STR);
             $stmt->execute();
 
